@@ -8,10 +8,24 @@ using namespace std;
 
 void solve(const vector<pair<string,string>>& ranges) 
 {
+    long long result = 0ll;
     for (const auto& r : ranges) {
-        
-        cerr << "Range: " << r.first << " to " << r.second << "\n";
+        cout << "Range: " << r.first << " to " << r.second << "\n";
+
+        long long first = stoll(r.first);
+        long long last = stoll(r.second);
+        for(long long i = first; i <= last; i++)
+        {
+            string curr = to_string(i);
+            string curr_doubled = curr+curr;
+            string space = curr_doubled.substr(1, curr_doubled.size() - 2);
+            if(space.find(curr)!=string::npos)
+            {
+                result+=i;
+            }
+        }
     }
+    cout << "Result is: " << result;
 }
 
 int main() 
