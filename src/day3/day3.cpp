@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "math.h"
 
 using namespace std;
 
@@ -35,6 +36,46 @@ void solve(vector<vector<int>> banks)
     cout << "Total joltage: " << total_joltage;
 }
 
+void solve2(vector<vector<int>> banks, const int K)
+{
+    unsigned long long total_joltage = 0; // Use unsigned long long for large sums
+
+    for (vector<int> bank : banks)
+    {
+        int n = bank.size();
+        int drop_count = n - K;
+        vector<int> result;
+        
+        for (int digit : bank)
+        {
+            while (!result.empty() && result.back() < digit && drop_count > 0)
+            {
+                result.pop_back();
+                drop_count--;
+            }
+            result.push_back(digit);
+        }
+        if (result.size() > K) 
+        {
+            result.resize(K);
+        }
+
+        int i = result.size() -1, j = 0;
+        long long multiplier = 1;
+        long long max_joltage = 0;
+        while(i >= 0)
+        {
+            max_joltage+=result[i]*multiplier;
+            j++;
+            i--;
+            multiplier *= 10;
+        }
+        total_joltage += max_joltage;
+    }
+
+    cout << "Total joltage for k = " << K << ": " << total_joltage << endl;
+}
+
 int main() 
 {
     ifstream input("src/day3/input.txt");
@@ -55,7 +96,8 @@ int main()
             }
             banks.push_back(joltages);
         }
-        solve(banks);
+        solve2(banks, 2);
+        solve2(banks, 12);
         input.close();
     }
     return 0;
