@@ -3,18 +3,8 @@ using namespace std;
 
 using coordinates2D = pair<int, int>;
 
-void solve(const map<coordinates2D,vector<coordinates2D>> &adj)
-{
-    int result = 0;
-    for (const auto& [coord, neighbors] : adj) {
-        if (neighbors.size() < 4) {
-            result++;
-        }
-    }
-    cout << result;
-}
 
-void addEdges(map<coordinates2D,vector<coordinates2D>> &adj, int r, int c, const vector<vector<char>> &diagram)
+void add_edges(map<coordinates2D,vector<coordinates2D>> &adj, int r, int c, const vector<vector<char>> &diagram)
 {
     /*
     0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
@@ -52,7 +42,7 @@ void addEdges(map<coordinates2D,vector<coordinates2D>> &adj, int r, int c, const
         }
     }
 }
-void createAdjencyListFromDiagram(const vector<vector<char>> &diagram, map<coordinates2D,vector<coordinates2D>> &adj)
+void create_adjency_list_from_diagram(const vector<vector<char>> &diagram, map<coordinates2D,vector<coordinates2D>> &adj)
 {
     for(size_t i = 0; i < diagram.size(); i++)
     {
@@ -60,10 +50,46 @@ void createAdjencyListFromDiagram(const vector<vector<char>> &diagram, map<coord
         {
             if(diagram[i][j] == '@')
             {
-                addEdges(adj, i, j, diagram);
+                adj[{static_cast<int>(i), static_cast<int>(j)}];
+                add_edges(adj, i, j, diagram);
             }
         }
     }
+}
+
+void solve(const map<coordinates2D,vector<coordinates2D>> &adj)
+{
+    int result = 0;
+    for (const auto& [coord, neighbors] : adj)
+    {
+        if (neighbors.size() < 4)
+        {
+            result++;
+        }
+    }
+    cout << "Part 1: (" << result << ") rolls of paper can be accessed by a forklift\n";
+}
+
+void solve2(map<coordinates2D,vector<coordinates2D>> &adj, vector<vector<char>> &diagram)
+{
+    int result = 0;
+    int accessible = 1;
+    while(accessible > 0)
+    {
+        accessible = 0;
+        for (const auto& [coord, neighbors] : adj)
+        {
+            if (neighbors.size() < 4)
+            {
+                accessible++;
+                diagram[coord.first][coord.second] = '.';
+            }
+        }
+        result += accessible;
+        adj.clear();
+        create_adjency_list_from_diagram(diagram,adj);
+    }
+    cout << "Part 2: (" << result << ") rolls of paper were removed.\n";
 }
 
 int main()
@@ -88,8 +114,9 @@ int main()
             diagram.push_back(row);
         }
         map<coordinates2D,vector<coordinates2D>> adj;
-        createAdjencyListFromDiagram(diagram, adj);
+        create_adjency_list_from_diagram(diagram, adj);
         solve(adj);
+        solve2(adj, diagram);
         input.close();
     }
     return 0;
