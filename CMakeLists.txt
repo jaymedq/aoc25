@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
 
 project(aoc25)
-
+add_compile_options(-g -O0)
 add_library(common)
 target_sources(common
     PRIVATE
@@ -54,6 +54,17 @@ target_sources(day5
 )
 target_include_directories(
     day5
+    PRIVATE
+    include/
+)
+
+add_executable(day6)
+target_sources(day6
+    PRIVATE
+    src/day6/day6.cpp
+)
+target_include_directories(
+    day6
     PRIVATE
     include/
 )
