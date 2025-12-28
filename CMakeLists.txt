@@ -69,3 +69,14 @@ target_include_directories(
     include/
 )
 
+add_executable(day7)
+target_sources(day7
+    PRIVATE
+    src/day7/day7.cpp
+)
+target_include_directories(
+    day7
+    PRIVATE
+    include/
+)
+
